@@ -1,3 +1,19 @@
+--Membuat Keyspace Online Book Sales
+CREATE KEYSPACE online_book_sales WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1 };
+
+-- Menambahkan index pada tabel book_by_title untuk pencarian berdasarkan genre
+CREATE INDEX IF NOT EXISTS idx_genre_on_book_by_title ON book_by_title (genre);
+
+-- Menambahkan index pada tabel book_by_author untuk pencarian berdasarkan genre
+CREATE INDEX IF NOT EXISTS idx_genre_on_book_by_author ON book_by_author (genre);
+
+-- Menambahkan index pada tabel sales_transaction untuk pencarian berdasarkan buyer_id
+CREATE INDEX IF NOT EXISTS idx_buyer_id_on_sales_transaction ON sales_transaction (buyer_id);
+
+-- Menambahkan index pada tabel book_by_buyer untuk pencarian berdasarkan title
+CREATE INDEX IF NOT EXISTS idx_title_on_book_by_buyer ON book_by_buyer (title);
+
+
 --Memasukkan Sekaligus Data Per Tabel
 
 BEGIN BATCH
