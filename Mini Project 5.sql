@@ -77,3 +77,48 @@ CREATE TABLE IF NOT EXISTS book_by_author (
 );
 
 
+CREATE USER user1 WITH PASSWORD 'password1' NOSUPERUSER ;
+CREATE USER user2 WITH PASSWORD 'password2' NOSUPERUSER ;
+
+--Untuk user1 (CRUD di book_by_author, tapi tidak di book_by_title)
+GRANT ALL ON mini_project5.book_by_author TO user1; -- CRUD di Tabel B
+REVOKE ALL ON mini_project5.book_by_title FROM user1; -- Tidak ada akses ke Tabel A
+
+--Untuk user2 (Hanya SELECT di book_by_title, tapi tidak di book_by_author)
+GRANT SELECT ON mini_project5.book_by_title TO user2; -- Hanya SELECT di Tabel A
+REVOKE ALL ON mini_project5.book_by_author FROM user2; -- Tidak ada akses ke Tabel B
+
+--Melihat List permission dari masing-masing user
+LIST ALL PERMISSIONS OF user1;
+LIST ALL PERMISSIONS OF user2;
+
+
+--Test Case
+
+--user1
+dokcer exec -it node1 cqlsh -u user1 -p password1
+
+--Select
+SELECT * FROM mini_project5.book_by_author;
+
+--UPDATE
+UPDATE mini_project5.book_by_author 
+SET price = 29.99 
+WHERE book_id = 1 AND author = 'Author1' AND genre = 'Fiction';
+
+--DELETE
+DELETE FROM mini_project5.book_by_author 
+WHERE book_id = 1 AND author = 'Author1' AND genre = 'Fiction';
+
+--Select ke tabel A (seharusnya ditolak)
+SELECT * FROM mini_project5.book_by_title;
+
+
+--user2
+docker exec -it node1 cqlsh -u user2 -p password2
+
+--Select ke tabel A
+SELECT * FROM mini_project5.book_by_title;
+
+--Select ke tabel B (harus nya ditolak)
+SELECT * FROM mini_project5.book_by_author;
