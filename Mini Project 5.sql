@@ -39,7 +39,7 @@ volumes:
 
 --Lalu menyalakan docker compose nya
 docker-compose up -d
-
+------------------------------------------------------------------------------
 --Edit terlebih dahulu Password
 docker exec -it node1 bash
 apt-get update
@@ -56,6 +56,8 @@ docker exec -it node1 cqlsh
 --Buat Keyspace
 CREATE KEYSPACE IF NOT EXISTS mini_project5 WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'dc1' : 2};
 USE mini_project5;
+
+--------------------------------------------------------------------------------------------------------------------------
 
 --Menggunakan contoh 2 tabel
 CREATE TABLE IF NOT EXISTS book_by_title (
@@ -76,7 +78,7 @@ CREATE TABLE IF NOT EXISTS book_by_author (
     PRIMARY KEY ((author, genre), book_id)
 );
 
-
+--Buat user
 CREATE USER user1 WITH PASSWORD 'password1' NOSUPERUSER ;
 CREATE USER user2 WITH PASSWORD 'password2' NOSUPERUSER ;
 
@@ -92,6 +94,8 @@ REVOKE ALL ON mini_project5.book_by_author FROM user2; -- Tidak ada akses ke Tab
 LIST ALL PERMISSIONS OF user1;
 LIST ALL PERMISSIONS OF user2;
 
+--Menonaktifkan user default cassandra menjadi nonaktif
+ALTER ROLE cassandra WITH LOGIN = false;
 
 --Test Case
 
