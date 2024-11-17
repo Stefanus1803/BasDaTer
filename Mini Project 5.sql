@@ -37,16 +37,16 @@ volumes:
   node1_data:
   node2_data:
 
---Lalu menyalakan docker compose nya
+--Lalu menyalakan docker compose nya untuk membuat node nya
 docker-compose up -d
 ------------------------------------------------------------------------------
---Edit terlebih dahulu Password
+--Edit terlebih dahulu Password untuk Cassandra Security
 docker exec -it node1 bash
 apt-get update
 apt-get install nano
 nano /etc/cassandra/cassandra.yaml
 
---ganti menjadi seperti ini
+--Lalu ganti menjadi seperti ini
 authenticator: PasswordAuthenticator
 authorizer : CassandraAuthorizer
 
